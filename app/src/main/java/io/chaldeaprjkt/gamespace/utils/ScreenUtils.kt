@@ -83,8 +83,8 @@ class ScreenUtils @Inject constructor(private val context: Context) {
         }
         remoteRecording = null
         if (isGestureLocked) {
-            Settings.System.putIntForUser(context.contentResolver,
-                    Settings.System.LOCK_GESTURE_STATUS, 0, UserHandle.USER_CURRENT)
+            Settings.System.putInt(context.contentResolver,
+                    Settings.System.LOCK_GESTURE_STATUS, 0)
             isGestureLocked = false
         }
     }
@@ -112,9 +112,8 @@ class ScreenUtils @Inject constructor(private val context: Context) {
     var lockGesture = false
         get() = isGestureLocked
         set(enable) {
-            Settings.System.putIntForUser(context.contentResolver,
-                    Settings.System.LOCK_GESTURE_STATUS, if (enable) 1 else 0,
-                    UserHandle.USER_CURRENT)
+            Settings.System.putInt(context.contentResolver,
+                    Settings.System.LOCK_GESTURE_STATUS, if (enable) 1 else 0)
             field = enable
             isGestureLocked = enable
         }
