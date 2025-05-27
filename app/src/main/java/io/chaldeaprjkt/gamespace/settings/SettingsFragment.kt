@@ -20,12 +20,10 @@ package io.chaldeaprjkt.gamespace.settings
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemProperties
 import android.provider.Settings
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import dagger.hilt.android.AndroidEntryPoint
 import io.chaldeaprjkt.gamespace.R
@@ -59,16 +57,11 @@ class SettingsFragment : Hilt_SettingsFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val isGoogleDevice = Build.MANUFACTURER.equals("Google", ignoreCase = true)
-        val bypassSupported = SystemProperties.getBoolean("persist.sys.battery_bypass_supported", false)
         val bypassChargePref = findPreference<Preference>("bypass_charge_enabled")
-
-        if (!isGoogleDevice && !bypassSupported && bypassChargePref != null) {
-            val category = findPreference<Preference>("in_game_preferences") as? PreferenceCategory
-            category?.removePreference(bypassChargePref)
+        if (!isGoogleDevice && bypassChargePref != null) {
+            preferenceScreen.removePreference(bypassChargePref)
         }
-
         apps = findPreference(Settings.System.GAMESPACE_GAME_LIST)
         apps?.onRegisteredAppClick {
             perAppResult.launch(Intent(context, PerAppSettingsActivity::class.java).apply {
